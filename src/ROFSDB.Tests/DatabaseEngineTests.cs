@@ -24,7 +24,7 @@ namespace TIKSN.ROFSDB.Tests
         [Fact]
         public async Task CollectionNameTest()
         {
-            var actual = await yamlDatabaseEngineFixture.DatabaseEngine.GetCollectionsAsync(default);
+            var actual = await yamlDatabaseEngineFixture.DatabaseEngine.GetCollectionsAsync(default).ToArrayAsync(default);
             var expected = new[] { "Countries", "Cities" };
 
             actual.Should().BeEquivalentTo(expected);
