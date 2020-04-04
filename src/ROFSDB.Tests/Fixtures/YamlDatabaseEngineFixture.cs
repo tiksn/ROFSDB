@@ -76,6 +76,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("ID: 1948404451");
             stringBuilder.AppendLine("Name: Paris");
             stringBuilder.AppendLine("CountryID: 1552721979");
+            stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("ID: 1062005753");
             stringBuilder.AppendLine("Name: Rome");
             stringBuilder.AppendLine("CountryID: 1501801186");
