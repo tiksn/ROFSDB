@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TIKSN.ROFSDB
 {
@@ -14,9 +14,12 @@ namespace TIKSN.ROFSDB
             this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
         }
 
-        public Task<string[]> GetCollectionsAsync(CancellationToken cancellationToken)
+        public IAsyncEnumerable<string> GetCollectionsAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return fileStorage
+                .ListAsync("/", cancellationToken)
+                .Where(x => x.IsDirectory)
+                .Select(x => x.Name);
         }
 
         public IAsyncEnumerable<T> GetDocumentsAsync<T>(string collectionName, CancellationToken cancellationToken)
