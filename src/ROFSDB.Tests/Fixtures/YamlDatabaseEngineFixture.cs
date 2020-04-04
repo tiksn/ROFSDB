@@ -3,6 +3,7 @@ using Storage.Net.Blobs;
 using System.Text;
 using System.Threading.Tasks;
 using TIKSN.ROFSDB.FileStorageAdapters;
+using TIKSN.ROFSDB.Serialization;
 using Xunit;
 
 namespace TIKSN.ROFSDB.Tests.Fixtures
@@ -19,7 +20,8 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
         public async Task InitializeAsync()
         {
             IBlobStorage blobStorage = await CreateBlobStorageAsync();
-            DatabaseEngine = new DatabaseEngine(new BlobStorageToFileStorageAdapter(blobStorage));
+            var yamlSerialization = new YamlSerialization();
+            DatabaseEngine = new DatabaseEngine(new BlobStorageToFileStorageAdapter(blobStorage), yamlSerialization);
         }
 
         private async Task<IBlobStorage> CreateBlobStorageAsync()
