@@ -7,6 +7,13 @@ namespace TIKSN.ROFSDB
 {
     public class DatabaseEngine : IDatabaseEngine
     {
+        private readonly IFileStorage fileStorage;
+
+        public DatabaseEngine(IFileStorage fileStorage)
+        {
+            this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
+        }
+
         public Task<string[]> GetCollectionsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
