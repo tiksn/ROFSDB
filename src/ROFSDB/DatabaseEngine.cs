@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace TIKSN.ROFSDB
 {
     public class DatabaseEngine : IDatabaseEngine
     {
-        public string[] GetCollectionsAsync(CancellationToken cancellationToken)
+        public Task<string[]> GetCollectionsAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
