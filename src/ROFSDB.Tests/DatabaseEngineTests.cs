@@ -1,26 +1,31 @@
-﻿using Storage.Net;
-using Storage.Net.Blobs;
-using System;
+﻿using System;
+using System.Threading.Tasks;
+using TIKSN.ROFSDB.Tests.Fixtures;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace TIKSN.ROFSDB.Tests
 {
-    public class DatabaseEngineTests : IDisposable
+    [Collection("Yaml Database Engine collection")]
+    public class DatabaseEngineTests
     {
         private readonly ITestOutputHelper testOutputHelper;
-        private readonly IDatabaseEngine databaseEngine;
-        private readonly IBlobStorage blobStorage;
+        private readonly YamlDatabaseEngineFixture yamlDatabaseEngineFixture;
 
-        public DatabaseEngineTests(ITestOutputHelper testOutputHelper)
+        public DatabaseEngineTests(ITestOutputHelper testOutputHelper, YamlDatabaseEngineFixture yamlDatabaseEngineFixture)
         {
             this.testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
-            this.blobStorage = StorageFactory.Blobs.InMemory();
-            this.databaseEngine = new DatabaseEngine();
+            this.yamlDatabaseEngineFixture = yamlDatabaseEngineFixture ?? throw new ArgumentNullException(nameof(yamlDatabaseEngineFixture));
         }
 
-        public void Dispose()
+        [Fact]
+        public async Task Test1()
         {
-            blobStorage.Dispose();
+        }
+
+        [Fact]
+        public async Task Test2()
+        {
         }
     }
 }
