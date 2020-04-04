@@ -8,7 +8,7 @@ Task Publish -Depends Pack {
     Exec { nuget push $nupkg -ApiKey $apiKey -Source https://api.nuget.org/v3/index.json }
 }
 
-Task Pack -Depends Build, EstimateVersions {
+Task Pack -Depends Test, EstimateVersions {
     $project = "./src/ROFSDB/ROFSDB.csproj"
     $project = Resolve-Path $project
     $project = $project.Path
@@ -24,6 +24,12 @@ Task EstimateVersions {
 
     $Version = $Version.ToString()
     $script:NextVersion = $Version
+}
+
+Task Test -Depends Build {
+    $project = Resolve-Path "./src/ROFSDB.Tests/ROFSDB.Tests.csproj"
+    $project = $project.Path
+    Exec { dotnet test $project }
 }
 
 Task Build -Depends Clean {
