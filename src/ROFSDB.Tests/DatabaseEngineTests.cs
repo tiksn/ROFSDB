@@ -1,6 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using TIKSN.ROFSDB.Tests.Fixtures;
+using TIKSN.ROFSDB.Tests.Models;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,13 +22,23 @@ namespace TIKSN.ROFSDB.Tests
         }
 
         [Fact]
-        public async Task Test1()
+        public async Task CollectionNameTest()
         {
+            var actual = await yamlDatabaseEngineFixture.DatabaseEngine.GetCollectionsAsync(default);
+            var expected = new[] { "Countries", "Cities" };
+
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task Test2()
+        public async Task ContryCityRelationsTest()
         {
+            await foreach (var city in yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default))
+            {
+                var countryFound = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<Country>("Countries", default).AnyAsync(x => x.ID == city.CountryID);
+
+                countryFound.Should().BeTrue();
+            }
         }
     }
 }
