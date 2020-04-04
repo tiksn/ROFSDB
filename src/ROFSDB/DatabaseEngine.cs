@@ -19,7 +19,7 @@ namespace TIKSN.ROFSDB
             throw new NotImplementedException();
         }
 
-        public IAsyncEnumerable<T> GetDocumentsAsync<T>(CancellationToken cancellationToken)
+        public IAsyncEnumerable<T> GetDocumentsAsync<T>(string collectionName, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
