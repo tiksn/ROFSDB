@@ -40,5 +40,21 @@ namespace TIKSN.ROFSDB.Tests
                 countryFound.Should().BeTrue();
             }
         }
+
+        [Fact]
+        public async Task ContryCountTest()
+        {
+            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
+
+            count.Should().Be(5);
+        }
+
+        [Fact]
+        public async Task CityCountTest()
+        {
+            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default).CountAsync(default);
+
+            count.Should().Be(5);
+        }
     }
 }
