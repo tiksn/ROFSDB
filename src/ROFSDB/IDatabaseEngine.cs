@@ -8,6 +8,6 @@ namespace TIKSN.ROFSDB
     {
         Task<string[]> GetCollectionsAsync(CancellationToken cancellationToken);
 
-        IAsyncEnumerable<T> GetDocumentsAsync<T>(CancellationToken cancellationToken);
+        IAsyncEnumerable<T> GetDocumentsAsync<T>(string collectionName, CancellationToken cancellationToken);
     }
 }
