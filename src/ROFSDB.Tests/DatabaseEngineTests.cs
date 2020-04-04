@@ -22,6 +22,14 @@ namespace TIKSN.ROFSDB.Tests
         }
 
         [Fact]
+        public async Task CityCountTest()
+        {
+            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default).CountAsync(default);
+
+            count.Should().Be(6);
+        }
+
+        [Fact]
         public async Task CollectionNameTest()
         {
             var actual = await yamlDatabaseEngineFixture.DatabaseEngine.GetCollectionsAsync(default).ToArrayAsync(default);
@@ -45,14 +53,6 @@ namespace TIKSN.ROFSDB.Tests
         public async Task ContryCountTest()
         {
             var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
-
-            count.Should().Be(5);
-        }
-
-        [Fact]
-        public async Task CityCountTest()
-        {
-            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default).CountAsync(default);
 
             count.Should().Be(5);
         }
