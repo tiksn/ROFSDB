@@ -1,0 +1,21 @@
+
+Lint
+This run
+Workflow file
+.github/workflows/lint.yml
+name: Lint
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Super-Linter
+      uses: github/super-linter@v3.9.3
