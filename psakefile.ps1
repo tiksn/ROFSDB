@@ -1,5 +1,5 @@
 Task Publish -Depends Pack {
-    Import-Module -Name Microsoft.PowerShell.SecretsManagement
+    Import-Module -Name Microsoft.PowerShell.SecretManagement
     $apiKey = Get-Secret -Name 'TIKSN-ROFSDB-NuGet-ApiKey' -AsPlainText
     $nupkg = Join-Path -Path $script:trashFolder -ChildPath "ROFSDB.$script:NextVersion.nupkg"
     $nupkg = Resolve-Path -Path $nupkg
