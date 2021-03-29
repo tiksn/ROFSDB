@@ -21,7 +21,7 @@
     </PackageReference>
     <PackageReference Include="Storage.Net" Version="9.2.7" />
     <PackageReference Include="System.Interactive.Async" Version="5.0.0" />
-    <PackageReference Include="YamlDotNet" Version="9.1.4" />
+    <PackageReference Include="YamlDotNet" Version="10.0.0" />
   </ItemGroup>
 
 </Project>
