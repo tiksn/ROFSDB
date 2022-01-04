@@ -13,4 +13,4 @@ jobs:
     
     steps:
     - name: Super-Linter
-      uses: github/super-linter@v3.9.3
+      uses: github/super-linter@v4
