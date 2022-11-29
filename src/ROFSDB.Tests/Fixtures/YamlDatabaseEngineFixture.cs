@@ -1,32 +1,37 @@
-﻿using Storage.Net;
-using Storage.Net.Blobs;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using TIKSN.ROFSDB.FileStorageAdapters;
 using TIKSN.ROFSDB.Serialization;
 using Xunit;
+using Zio;
+using Zio.FileSystems;
 
 namespace TIKSN.ROFSDB.Tests.Fixtures
 {
     public class YamlDatabaseEngineFixture : IAsyncLifetime
     {
+        private MemoryFileSystem memoryFileSystem;
+
         public IDatabaseEngine DatabaseEngine { get; private set; }
 
         public Task DisposeAsync()
         {
+            memoryFileSystem?.Dispose();
             return Task.CompletedTask;
         }
 
         public async Task InitializeAsync()
         {
-            IBlobStorage blobStorage = await CreateBlobStorageAsync();
+            this.memoryFileSystem = new();
+            WriteFiles(this.memoryFileSystem);
             var yamlSerialization = new YamlSerialization();
-            DatabaseEngine = new DatabaseEngine(new BlobStorageToFileStorageAdapter(blobStorage), yamlSerialization);
+            DatabaseEngine = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), yamlSerialization);
         }
 
-        private async Task<IBlobStorage> CreateBlobStorageAsync()
+        private static void WriteFiles(MemoryFileSystem memoryFileSystem)
         {
-            var blobStorage = StorageFactory.Blobs.InMemory();
+            memoryFileSystem.CreateDirectory("/Countries/");
+            memoryFileSystem.CreateDirectory("/Cities/");
 
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("---");
@@ -36,7 +41,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("ID: 965475701");
             stringBuilder.AppendLine("Name: Canada");
             stringBuilder.AppendLine("...");
-            await blobStorage.WriteTextAsync("/Countries/NorthAmerica.yaml", stringBuilder.ToString(), Encoding.UTF8);
+            memoryFileSystem.WriteAllText("/Countries/NorthAmerica.yaml", stringBuilder.ToString(), Encoding.UTF8);
 
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
@@ -49,7 +54,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("ID: 1501801186");
             stringBuilder.AppendLine("Name: Italy");
             stringBuilder.AppendLine("...");
-            await blobStorage.WriteTextAsync("/Countries/Europe.yaml", stringBuilder.ToString(), Encoding.UTF8);
+            memoryFileSystem.WriteAllText("/Countries/Europe.yaml", stringBuilder.ToString(), Encoding.UTF8);
 
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
@@ -57,7 +62,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("Name: New York City");
             stringBuilder.AppendLine("CountryID: 1100746772");
             stringBuilder.AppendLine("...");
-            await blobStorage.WriteTextAsync("/Cities/Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
+            memoryFileSystem.WriteAllText("/Cities/Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
 
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
@@ -81,8 +86,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("Name: Rome");
             stringBuilder.AppendLine("CountryID: 1501801186");
             stringBuilder.AppendLine("...");
-            await blobStorage.WriteTextAsync("/Cities/Non-Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
-            return blobStorage;
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
         }
     }
 }
