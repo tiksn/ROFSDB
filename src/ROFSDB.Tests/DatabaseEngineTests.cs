@@ -9,52 +9,102 @@ using Xunit.Abstractions;
 
 namespace TIKSN.ROFSDB.Tests
 {
-    [Collection("Yaml Database Engine collection")]
+    [Collection("Database Engine collection")]
     public class DatabaseEngineTests
     {
+        private readonly DatabaseEngineFixture databaseEngineFixture;
         private readonly ITestOutputHelper testOutputHelper;
-        private readonly YamlDatabaseEngineFixture yamlDatabaseEngineFixture;
 
-        public DatabaseEngineTests(ITestOutputHelper testOutputHelper, YamlDatabaseEngineFixture yamlDatabaseEngineFixture)
+        public DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEngineFixture databaseEngineFixture)
         {
             this.testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
-            this.yamlDatabaseEngineFixture = yamlDatabaseEngineFixture ?? throw new ArgumentNullException(nameof(yamlDatabaseEngineFixture));
+            this.databaseEngineFixture = databaseEngineFixture ?? throw new ArgumentNullException(nameof(databaseEngineFixture));
         }
 
-        [Fact]
-        public async Task CityCountTest()
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CityCountTest(string fileFormat)
         {
-            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default).CountAsync(default);
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<City>("Cities", default).CountAsync(default);
 
             count.Should().Be(6);
         }
 
-        [Fact]
-        public async Task CollectionNameTest()
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CollectionNameTest(string fileFormat)
         {
-            var actual = await yamlDatabaseEngineFixture.DatabaseEngine.GetCollectionsAsync(default).ToArrayAsync(default);
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            var actual = await databaseEngineFixture.DatabaseEngines[fileFormat].GetCollectionsAsync(default).ToArrayAsync(default);
             var expected = new[] { "Countries", "Cities" };
 
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
-        public async Task ContryCityRelationsTest()
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CountryCityRelationsTest(string fileFormat)
         {
-            await foreach (var city in yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<City>("Cities", default))
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            await foreach (var city in databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<City>("Cities", default))
             {
-                var countryFound = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<Country>("Countries", default).AnyAsync(x => x.ID == city.CountryID);
+                var countryFound = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<Country>("Countries", default).AnyAsync(x => x.ID == city.CountryID);
 
                 countryFound.Should().BeTrue();
             }
         }
 
-        [Fact]
-        public async Task ContryCountTest()
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CountryCountTest(string fileFormat)
         {
-            var count = await yamlDatabaseEngineFixture.DatabaseEngine.GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
 
             count.Should().Be(5);
+        }
+
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CountryIdTest(string fileFormat)
+        {
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            var actual = await databaseEngineFixture.DatabaseEngines[fileFormat]
+                .GetDocumentsAsync<Country>("Countries", default)
+                .Select(x => x.ID)
+                .ToArrayAsync(default);
+
+            var expected = new[] { 1419150635, 965475701, 1552721979, 1501801186, 1100746772 };
+
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [InlineData("YAML")]
+        [InlineData("TOML")]
+        public async Task CountryNameTest(string fileFormat)
+        {
+            databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+
+            var actual = await databaseEngineFixture.DatabaseEngines[fileFormat]
+                .GetDocumentsAsync<Country>("Countries", default)
+                .Select(x => x.Name)
+                .ToArrayAsync(default);
+
+            var expected = new[] { "Austria", "Canada", "France", "Italy", "United States" };
+
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }
