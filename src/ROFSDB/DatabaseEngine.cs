@@ -25,7 +25,10 @@ namespace TIKSN.ROFSDB
                 .Select(x => x.Name);
         }
 
-        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(string collectionName, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
+            string collectionName,
+            CancellationToken cancellationToken)
+            where T : class, new()
         {
             var files = fileStorage
                 .ListAsync($"/{collectionName}", cancellationToken)
