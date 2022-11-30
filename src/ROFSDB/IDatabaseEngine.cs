@@ -7,6 +7,9 @@ namespace TIKSN.ROFSDB
     {
         IAsyncEnumerable<string> GetCollectionsAsync(CancellationToken cancellationToken);
 
-        IAsyncEnumerable<T> GetDocumentsAsync<T>(string collectionName, CancellationToken cancellationToken);
+        IAsyncEnumerable<T> GetDocumentsAsync<T>(
+            string collectionName,
+            CancellationToken cancellationToken)
+            where T : class, new();
     }
 }

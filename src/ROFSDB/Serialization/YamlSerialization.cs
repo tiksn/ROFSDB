@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -13,7 +14,10 @@ namespace TIKSN.ROFSDB.Serialization
 
         public IEnumerable<string> FileExtensions => fileExtensions;
 
-        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(Stream stream, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
+            Stream stream,
+            [EnumeratorCancellation] CancellationToken cancellationToken)
+            where T : class, new()
         {
             var streamReader = new StreamReader(stream);
             var scanner = new Scanner(streamReader);
