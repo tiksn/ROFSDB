@@ -3,4 +3,4 @@ param(
     [string]$Version
 )
 
-Invoke-psake -taskList Publish -parameters @{"Version" = $Version }
+Invoke-Build -Task Publish -Version $Version
