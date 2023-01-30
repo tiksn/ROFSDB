@@ -1,1 +1,1 @@
-Invoke-psake -taskList Test
+Invoke-Build -Task Test
