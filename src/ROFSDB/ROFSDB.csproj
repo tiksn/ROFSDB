@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>TIKSN.ROFSDB</RootNamespace>
     <AssemblyName>TIKSN.ROFSDB</AssemblyName>
     <PackageId>ROFSDB</PackageId>
@@ -19,6 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Octopus.CoreParsers.Hcl" Version="1.1.599" />
     <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
     <PackageReference Include="Tomlyn" Version="0.16.2" />
     <PackageReference Include="YamlDotNet" Version="13.7.1" />
