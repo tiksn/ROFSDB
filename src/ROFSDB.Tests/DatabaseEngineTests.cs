@@ -24,6 +24,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CityCountTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
@@ -36,6 +37,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CollectionNameTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
@@ -49,6 +51,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CountryCityRelationsTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
@@ -64,6 +67,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CountryCountTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
@@ -76,6 +80,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CountryIdTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
@@ -93,6 +98,7 @@ namespace TIKSN.ROFSDB.Tests
         [Theory]
         [InlineData("YAML")]
         [InlineData("TOML")]
+        [InlineData("HCL")]
         public async Task CountryNameTest(string fileFormat)
         {
             databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
