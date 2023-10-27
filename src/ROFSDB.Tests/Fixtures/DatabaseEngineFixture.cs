@@ -29,9 +29,11 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             WriteFiles(this.memoryFileSystem);
             var yamlSerialization = new YamlSerialization();
             var tomlSerialization = new TomlSerialization();
+            var hclSerialization = new HclSerialization();
             var databaseEngines = new Dictionary<string, IDatabaseEngine>();
             databaseEngines["YAML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), yamlSerialization);
             databaseEngines["TOML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), tomlSerialization);
+            databaseEngines["HCL"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), hclSerialization);
             DatabaseEngines = databaseEngines;
         }
 
@@ -51,6 +53,8 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
 
         private static void WriteEuropeanCountries(MemoryFileSystem memoryFileSystem, StringBuilder stringBuilder)
         {
+            #region YAML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("ID: 1419150635");
@@ -63,6 +67,10 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("Name: Italy");
             stringBuilder.AppendLine("...");
             memoryFileSystem.WriteAllText("/Countries/Europe.yaml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion YAML
+
+            #region TOML
 
             stringBuilder.Clear();
             stringBuilder.AppendLine("id = 1419150635");
@@ -78,6 +86,27 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("id = 1501801186");
             stringBuilder.AppendLine("name = 'Italy'");
             memoryFileSystem.WriteAllText("/Countries/Europe-Italy.toml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion TOML
+
+            #region HCL
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("\"id\" = 1419150635");
+            stringBuilder.AppendLine("\"name\" = \"Austria\"");
+            memoryFileSystem.WriteAllText("/Countries/Europe-Austria.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("\"id\" = 1552721979");
+            stringBuilder.AppendLine("\"name\" = \"France\"");
+            memoryFileSystem.WriteAllText("/Countries/Europe-France.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("\"id\" = 1501801186");
+            stringBuilder.AppendLine("\"name\" = \"Italy\"");
+            memoryFileSystem.WriteAllText("/Countries/Europe-Italy.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion HCL
         }
 
         private static void WriteFiles(MemoryFileSystem memoryFileSystem)
@@ -99,6 +128,8 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
 
         private static void WriteMegacities(MemoryFileSystem memoryFileSystem, StringBuilder stringBuilder)
         {
+            #region YAML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("ID: 918909193");
@@ -107,15 +138,33 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("...");
             memoryFileSystem.WriteAllText("/Cities/Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
 
+            #endregion YAML
+
+            #region TOML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("id = 918909193");
             stringBuilder.AppendLine("name = 'New York City'");
             stringBuilder.AppendLine("country_id = 1100746772");
             memoryFileSystem.WriteAllText("/Cities/Megacities-NewYorkCity.toml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion TOML
+
+            #region HCL
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("ID = 918909193");
+            stringBuilder.AppendLine("Name = \"New York City\"");
+            stringBuilder.AppendLine("CountryID = 1100746772");
+            memoryFileSystem.WriteAllText("/Cities/Megacities-NewYorkCity.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion HCL
         }
 
         private static void WriteNonMegacities(MemoryFileSystem memoryFileSystem, StringBuilder stringBuilder)
         {
+            #region YAML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("ID: 356389956");
@@ -139,6 +188,10 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("CountryID: 1501801186");
             stringBuilder.AppendLine("...");
             memoryFileSystem.WriteAllText("/Cities/Non-Megacities.yaml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion YAML
+
+            #region TOML
 
             stringBuilder.Clear();
             stringBuilder.AppendLine("id = 356389956");
@@ -169,10 +222,48 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("name = 'Rome'");
             stringBuilder.AppendLine("country_id = 1501801186");
             memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Rome.toml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion TOML
+
+            #region HCL
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("Id = 356389956");
+            stringBuilder.AppendLine("Name = \"Austin\"");
+            stringBuilder.AppendLine("CountryID = 1100746772");
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Austin.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("Id = 1572248850");
+            stringBuilder.AppendLine("Name = \"Toronto\"");
+            stringBuilder.AppendLine("CountryID = 965475701");
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Toronto.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("Id = 1859443008");
+            stringBuilder.AppendLine("Name = \"Vienna\"");
+            stringBuilder.AppendLine("CountryID = 1419150635");
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Vienna.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("Id = 1948404451");
+            stringBuilder.AppendLine("Name = \"Paris\"");
+            stringBuilder.AppendLine("CountryID = 1552721979");
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Paris.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("Id = 1062005753");
+            stringBuilder.AppendLine("Name = \"Rome\"");
+            stringBuilder.AppendLine("CountryID = 1501801186");
+            memoryFileSystem.WriteAllText("/Cities/Non-Megacities-Rome.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion HCL
         }
 
         private static void WriteNorthAmericanCountries(MemoryFileSystem memoryFileSystem, StringBuilder stringBuilder)
         {
+            #region YAML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("ID: 1100746772");
@@ -183,6 +274,10 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("...");
             memoryFileSystem.WriteAllText("/Countries/NorthAmerica.yaml", stringBuilder.ToString(), Encoding.UTF8);
 
+            #endregion YAML
+
+            #region TOML
+
             stringBuilder.Clear();
             stringBuilder.AppendLine("id = 1100746772");
             stringBuilder.AppendLine("name = 'United States'");
@@ -192,6 +287,22 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             stringBuilder.AppendLine("id = 965475701");
             stringBuilder.AppendLine("name = 'Canada'");
             memoryFileSystem.WriteAllText("/Countries/NorthAmerica-Canada.toml", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion TOML
+
+            #region HCL
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("\"id\" = 1100746772");
+            stringBuilder.AppendLine("\"name\" = \"United States\"");
+            memoryFileSystem.WriteAllText("/Countries/NorthAmerica-UnitedStates.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            stringBuilder.Clear();
+            stringBuilder.AppendLine("\"id\" = 965475701");
+            stringBuilder.AppendLine("\"name\" = \"Canada\"");
+            memoryFileSystem.WriteAllText("/Countries/NorthAmerica-Canada.hcl", stringBuilder.ToString(), Encoding.UTF8);
+
+            #endregion HCL
         }
     }
 }
