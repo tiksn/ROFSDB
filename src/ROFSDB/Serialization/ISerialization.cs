@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace TIKSN.ROFSDB.Serialization
@@ -11,7 +10,7 @@ namespace TIKSN.ROFSDB.Serialization
 
         IAsyncEnumerable<T> GetDocumentsAsync<T>(
             Stream stream,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
             where T : class, new();
     }
 }
