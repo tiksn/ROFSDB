@@ -23,7 +23,7 @@
     <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
     <PackageReference Include="Tomlyn" Version="0.17.0" />
     <PackageReference Include="YamlDotNet" Version="15.1.4" />
-    <PackageReference Include="Zio" Version="0.17.0" />
+    <PackageReference Include="Zio" Version="0.17.1" />
   </ItemGroup>
 
 </Project>
