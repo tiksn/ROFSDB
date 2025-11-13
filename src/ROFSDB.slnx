@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ROFSDB.Tests/ROFSDB.Tests.csproj" />
+  <Project Path="ROFSDB/ROFSDB.csproj" />
+</Solution>
