@@ -46,13 +46,16 @@ task Test Build, {
 }
 
 task Build Clean, {
-    $solution = Resolve-Path './src/ROFSDB.sln'
+    $solution = Resolve-Path './src/ROFSDB.slnx'
     $solution = $solution.Path
     Exec { dotnet restore $solution }
     Exec { dotnet build $solution }
 }
 
 task Clean Init, {
+    $solution = Resolve-Path './src/ROFSDB.slnx'
+    $solution = $solution.Path
+    Exec { dotnet clean $solution }
 }
 
 task Init {

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ namespace TIKSN.ROFSDB.Tests
 
             var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<City>("Cities", default).CountAsync(default);
 
-            count.Should().Be(6);
+            count.ShouldBe(6);
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace TIKSN.ROFSDB.Tests
             var actual = await databaseEngineFixture.DatabaseEngines[fileFormat].GetCollectionsAsync(default).ToArrayAsync(default);
             var expected = new[] { "Countries", "Cities" };
 
-            actual.Should().BeEquivalentTo(expected);
+            actual.OrderBy(x => x).ShouldBe(expected.OrderBy(x => x));
         }
 
         [Theory]
@@ -60,7 +60,7 @@ namespace TIKSN.ROFSDB.Tests
             {
                 var countryFound = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<Country>("Countries", default).AnyAsync(x => x.ID == city.CountryID);
 
-                countryFound.Should().BeTrue();
+                countryFound.ShouldBeTrue();
             }
         }
 
@@ -74,7 +74,7 @@ namespace TIKSN.ROFSDB.Tests
 
             var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
 
-            count.Should().Be(5);
+            count.ShouldBe(5);
         }
 
         [Theory]
@@ -92,7 +92,7 @@ namespace TIKSN.ROFSDB.Tests
 
             var expected = new[] { 1419150635, 965475701, 1552721979, 1501801186, 1100746772 };
 
-            actual.Should().BeEquivalentTo(expected);
+            actual.OrderBy(x => x).ShouldBe(expected.OrderBy(x => x));
         }
 
         [Theory]
@@ -110,7 +110,7 @@ namespace TIKSN.ROFSDB.Tests
 
             var expected = new[] { "Austria", "Canada", "France", "Italy", "United States" };
 
-            actual.Should().BeEquivalentTo(expected);
+            actual.OrderBy(x => x).ShouldBe(expected.OrderBy(x => x));
         }
     }
 }
