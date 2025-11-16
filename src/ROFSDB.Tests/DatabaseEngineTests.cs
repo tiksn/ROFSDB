@@ -21,7 +21,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CityCountTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<City>("Cities", default).CountAsync(default);
 
@@ -34,7 +34,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CollectionNameTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         var actual = await databaseEngineFixture.DatabaseEngines[fileFormat].GetCollectionsAsync(default).ToArrayAsync(default);
         var expected = new[] { "Countries", "Cities" };
@@ -48,7 +48,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CountryCityRelationsTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         await foreach (var city in databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<City>("Cities", default))
         {
@@ -64,7 +64,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CountryCountTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         var count = await databaseEngineFixture.DatabaseEngines[fileFormat].GetDocumentsAsync<Country>("Countries", default).CountAsync(default);
 
@@ -77,7 +77,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CountryIdTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         var actual = await databaseEngineFixture.DatabaseEngines[fileFormat]
             .GetDocumentsAsync<Country>("Countries", default)
@@ -95,7 +95,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("HCL")]
     public async Task CountryNameTest(string fileFormat)
     {
-        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(testOutputHelper);
+        databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
 
         var actual = await databaseEngineFixture.DatabaseEngines[fileFormat]
             .GetDocumentsAsync<Country>("Countries", default)
