@@ -6,33 +6,31 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace TIKSN.ROFSDB.Serialization
+namespace TIKSN.ROFSDB.Serialization;
+
+public class YamlSerialization : ISerialization
 {
-    public class YamlSerialization : ISerialization
+    private static readonly IEnumerable<string> fileExtensions = [".yml", ".yaml"];
+
+    public IEnumerable<string> FileExtensions => fileExtensions;
+
+    public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
+        Stream stream,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+        where T : class, new()
     {
-        private static readonly IEnumerable<string> fileExtensions = new[] { ".yml", ".yaml" };
+        var streamReader = new StreamReader(stream);
+        var scanner = new Scanner(streamReader);
+        var deserializer = new DeserializerBuilder().Build();
 
-        public IEnumerable<string> FileExtensions => fileExtensions;
+        var parser = new Parser(scanner);
 
-        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
-            Stream stream,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
-            where T : class, new()
+        parser.Consume<StreamStart>();
+        while (parser.Accept(out DocumentStart _))
         {
-            var streamReader = new StreamReader(stream);
-            var scanner = new Scanner(streamReader);
-            var deserializer = new DeserializerBuilder().Build();
+            var doc = deserializer.Deserialize<T>(parser);
 
-            var parser = new Parser(scanner);
-
-            parser.Consume<StreamStart>();
-
-            while (parser.Accept(out DocumentStart documentStart))
-            {
-                var doc = deserializer.Deserialize<T>(parser);
-
-                yield return doc;
-            }
+            yield return doc;
         }
     }
 }

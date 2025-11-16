@@ -1,16 +1,9 @@
 ﻿using System;
 
-namespace TIKSN.ROFSDB
-{
-    public class FileStorageEntry
-    {
-        public FileStorageEntry(bool isDirectory, string name)
-        {
-            IsDirectory = isDirectory;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+namespace TIKSN.ROFSDB;
 
-        public bool IsDirectory { get; }
-        public string Name { get; }
-    }
+public class FileStorageEntry(bool isDirectory, string name)
+{
+    public bool IsDirectory { get; } = isDirectory;
+    public string Name { get; } = name ?? throw new ArgumentNullException(nameof(name));
 }
