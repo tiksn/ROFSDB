@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Zio;
 
 namespace TIKSN.ROFSDB.FileStorageAdapters
 {
-    public class ZioFileSystemToFileStorageAdapter : IFileStorage
+    public class ZioFileSystemToFileStorageAdapter(IFileSystem fileSystem) : IFileStorage
     {
-        private readonly IFileSystem fileSystem;
+        private readonly IFileSystem fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
-        public ZioFileSystemToFileStorageAdapter(IFileSystem fileSystem)
-        {
-            this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
-        }
-
-        public async IAsyncEnumerable<FileStorageEntry> ListAsync(string fullPath, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<FileStorageEntry> ListAsync(string fullPath, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var items = fileSystem.EnumerateItems(fullPath, SearchOption.TopDirectoryOnly);
 

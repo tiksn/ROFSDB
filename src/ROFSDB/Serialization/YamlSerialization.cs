@@ -10,7 +10,7 @@ namespace TIKSN.ROFSDB.Serialization
 {
     public class YamlSerialization : ISerialization
     {
-        private static readonly IEnumerable<string> fileExtensions = new[] { ".yml", ".yaml" };
+        private static readonly IEnumerable<string> fileExtensions = [".yml", ".yaml"];
 
         public IEnumerable<string> FileExtensions => fileExtensions;
 
@@ -26,8 +26,7 @@ namespace TIKSN.ROFSDB.Serialization
             var parser = new Parser(scanner);
 
             parser.Consume<StreamStart>();
-
-            while (parser.Accept(out DocumentStart documentStart))
+            while (parser.Accept(out DocumentStart _))
             {
                 var doc = deserializer.Deserialize<T>(parser);
 

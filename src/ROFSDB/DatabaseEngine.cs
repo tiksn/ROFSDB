@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using TIKSN.ROFSDB.Serialization;
 
 namespace TIKSN.ROFSDB
 {
-    public class DatabaseEngine : IDatabaseEngine
+    public class DatabaseEngine(IFileStorage fileStorage, ISerialization serialization) : IDatabaseEngine
     {
-        private readonly IFileStorage fileStorage;
-        private readonly ISerialization serialization;
-
-        public DatabaseEngine(IFileStorage fileStorage, ISerialization serialization)
-        {
-            this.fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
-            this.serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
-        }
+        private readonly IFileStorage fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
+        private readonly ISerialization serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
 
         public IAsyncEnumerable<string> GetCollectionsAsync(CancellationToken cancellationToken)
         {
@@ -27,7 +22,7 @@ namespace TIKSN.ROFSDB
 
         public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
             string collectionName,
-            CancellationToken cancellationToken)
+            [EnumeratorCancellation] CancellationToken cancellationToken)
             where T : class, new()
         {
             var files = fileStorage
@@ -36,7 +31,7 @@ namespace TIKSN.ROFSDB
 
             await foreach (var file in files)
             {
-                using var stream = await fileStorage.OpenReadAsync($"/{collectionName}/{file.Name}", cancellationToken);
+                await using var stream = await fileStorage.OpenReadAsync($"/{collectionName}/{file.Name}", cancellationToken);
                 await foreach (var doc in serialization.GetDocumentsAsync<T>(stream, cancellationToken))
                 {
                     yield return doc;

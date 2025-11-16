@@ -2,15 +2,9 @@
 
 namespace TIKSN.ROFSDB
 {
-    public class FileStorageEntry
+    public class FileStorageEntry(bool isDirectory, string name)
     {
-        public FileStorageEntry(bool isDirectory, string name)
-        {
-            IsDirectory = isDirectory;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
-
-        public bool IsDirectory { get; }
-        public string Name { get; }
+        public bool IsDirectory { get; } = isDirectory;
+        public string Name { get; } = name ?? throw new ArgumentNullException(nameof(name));
     }
 }

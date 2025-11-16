@@ -8,7 +8,7 @@ namespace TIKSN.ROFSDB.Serialization
 {
     public class TomlSerialization : ISerialization
     {
-        private static readonly IEnumerable<string> fileExtensions = new[] { ".toml" };
+        private static readonly IEnumerable<string> fileExtensions = [".toml"];
 
         public IEnumerable<string> FileExtensions => fileExtensions;
 

@@ -10,16 +10,10 @@ using Xunit.Abstractions;
 namespace TIKSN.ROFSDB.Tests
 {
     [Collection("Database Engine collection")]
-    public class DatabaseEngineTests
+    public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEngineFixture databaseEngineFixture)
     {
-        private readonly DatabaseEngineFixture databaseEngineFixture;
-        private readonly ITestOutputHelper testOutputHelper;
-
-        public DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEngineFixture databaseEngineFixture)
-        {
-            this.testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
-            this.databaseEngineFixture = databaseEngineFixture ?? throw new ArgumentNullException(nameof(databaseEngineFixture));
-        }
+        private readonly DatabaseEngineFixture databaseEngineFixture = databaseEngineFixture ?? throw new ArgumentNullException(nameof(databaseEngineFixture));
+        private readonly ITestOutputHelper testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
 
         [Theory]
         [InlineData("YAML")]

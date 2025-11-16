@@ -30,10 +30,12 @@ namespace TIKSN.ROFSDB.Tests.Fixtures
             var yamlSerialization = new YamlSerialization();
             var tomlSerialization = new TomlSerialization();
             var hclSerialization = new HclSerialization();
-            var databaseEngines = new Dictionary<string, IDatabaseEngine>();
-            databaseEngines["YAML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), yamlSerialization);
-            databaseEngines["TOML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), tomlSerialization);
-            databaseEngines["HCL"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), hclSerialization);
+            var databaseEngines = new Dictionary<string, IDatabaseEngine>
+            {
+                ["YAML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), yamlSerialization),
+                ["TOML"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), tomlSerialization),
+                ["HCL"] = new DatabaseEngine(new ZioFileSystemToFileStorageAdapter(this.memoryFileSystem), hclSerialization)
+            };
             DatabaseEngines = databaseEngines;
         }
 

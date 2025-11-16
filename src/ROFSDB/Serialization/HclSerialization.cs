@@ -13,7 +13,7 @@ namespace TIKSN.ROFSDB.Serialization
 {
     public class HclSerialization : ISerialization
     {
-        private static readonly IEnumerable<string> fileExtensions = new[] { ".hcl" };
+        private static readonly IEnumerable<string> fileExtensions = [".hcl"];
 
         public IEnumerable<string> FileExtensions => fileExtensions;
 
@@ -56,7 +56,7 @@ namespace TIKSN.ROFSDB.Serialization
                     x.IsStatic && x.IsPublic &&
                     PickParseMethodByParameters(x.GetParameters()));
 
-            return stringAndFormatterMethod.Invoke(null, new object[] { processedValue, CultureInfo.InvariantCulture });
+            return stringAndFormatterMethod.Invoke(null, [processedValue, CultureInfo.InvariantCulture]);
         }
 
         private static bool PickParseMethodByParameters(ParameterInfo[] parameterInfos)
