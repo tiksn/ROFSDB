@@ -53,6 +53,9 @@ task Build Clean, {
 }
 
 task Clean Init, {
+    $solution = Resolve-Path './src/ROFSDB.slnx'
+    $solution = $solution.Path
+    Exec { dotnet clean $solution }
 }
 
 task Init {
