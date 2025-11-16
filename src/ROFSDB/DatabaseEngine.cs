@@ -5,37 +5,36 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using TIKSN.ROFSDB.Serialization;
 
-namespace TIKSN.ROFSDB
+namespace TIKSN.ROFSDB;
+
+public class DatabaseEngine(IFileStorage fileStorage, ISerialization serialization) : IDatabaseEngine
 {
-    public class DatabaseEngine(IFileStorage fileStorage, ISerialization serialization) : IDatabaseEngine
+    private readonly IFileStorage fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
+    private readonly ISerialization serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
+
+    public IAsyncEnumerable<string> GetCollectionsAsync(CancellationToken cancellationToken)
     {
-        private readonly IFileStorage fileStorage = fileStorage ?? throw new ArgumentNullException(nameof(fileStorage));
-        private readonly ISerialization serialization = serialization ?? throw new ArgumentNullException(nameof(serialization));
+        return fileStorage
+            .ListAsync("/", cancellationToken)
+            .Where(x => x.IsDirectory)
+            .Select(x => x.Name);
+    }
 
-        public IAsyncEnumerable<string> GetCollectionsAsync(CancellationToken cancellationToken)
+    public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
+        string collectionName,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+        where T : class, new()
+    {
+        var files = fileStorage
+            .ListAsync($"/{collectionName}", cancellationToken)
+            .Where(x => !x.IsDirectory && serialization.FileExtensions.Any(e => x.Name.EndsWith(e, StringComparison.OrdinalIgnoreCase)));
+
+        await foreach (var file in files)
         {
-            return fileStorage
-                .ListAsync("/", cancellationToken)
-                .Where(x => x.IsDirectory)
-                .Select(x => x.Name);
-        }
-
-        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
-            string collectionName,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
-            where T : class, new()
-        {
-            var files = fileStorage
-                .ListAsync($"/{collectionName}", cancellationToken)
-                .Where(x => !x.IsDirectory && serialization.FileExtensions.Any(e => x.Name.EndsWith(e, StringComparison.OrdinalIgnoreCase)));
-
-            await foreach (var file in files)
+            await using var stream = await fileStorage.OpenReadAsync($"/{collectionName}/{file.Name}", cancellationToken);
+            await foreach (var doc in serialization.GetDocumentsAsync<T>(stream, cancellationToken))
             {
-                await using var stream = await fileStorage.OpenReadAsync($"/{collectionName}/{file.Name}", cancellationToken);
-                await foreach (var doc in serialization.GetDocumentsAsync<T>(stream, cancellationToken))
-                {
-                    yield return doc;
-                }
+                yield return doc;
             }
         }
     }

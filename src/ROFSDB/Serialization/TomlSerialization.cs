@@ -4,24 +4,23 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using Tomlyn;
 
-namespace TIKSN.ROFSDB.Serialization
+namespace TIKSN.ROFSDB.Serialization;
+
+public class TomlSerialization : ISerialization
 {
-    public class TomlSerialization : ISerialization
+    private static readonly IEnumerable<string> fileExtensions = [".toml"];
+
+    public IEnumerable<string> FileExtensions => fileExtensions;
+
+    public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
+        Stream stream,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+        where T : class, new()
     {
-        private static readonly IEnumerable<string> fileExtensions = [".toml"];
+        using var streamReader = new StreamReader(stream);
 
-        public IEnumerable<string> FileExtensions => fileExtensions;
+        string content = streamReader.ReadToEnd();
 
-        public async IAsyncEnumerable<T> GetDocumentsAsync<T>(
-            Stream stream,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
-            where T : class, new()
-        {
-            using var streamReader = new StreamReader(stream);
-
-            string content = streamReader.ReadToEnd();
-
-            yield return Toml.ToModel<T>(content);
-        }
+        yield return Toml.ToModel<T>(content);
     }
 }
