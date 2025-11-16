@@ -45,11 +45,19 @@ task Test Build, {
     Exec { dotnet test $project }
 }
 
-task Build Clean, {
+task Build Format, {
     $solution = Resolve-Path './src/ROFSDB.slnx'
     $solution = $solution.Path
     Exec { dotnet restore $solution }
     Exec { dotnet build $solution }
+}
+
+task Format Clean, {
+    $solution = Resolve-Path './src/ROFSDB.slnx'
+    $solution = $solution.Path
+    Exec { dotnet format whitespace $solution }
+    Exec { dotnet format style $solution --severity info }
+    Exec { dotnet format analyzers $solution --severity info }
 }
 
 task Clean Init, {
