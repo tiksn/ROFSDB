@@ -19,6 +19,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CityCountTest(string fileFormat)
     {
@@ -33,6 +34,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CollectionNameTest(string fileFormat)
     {
@@ -48,6 +50,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CountryCityRelationsTest(string fileFormat)
     {
@@ -65,6 +68,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CountryCountTest(string fileFormat)
     {
@@ -79,6 +83,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CountryIdTest(string fileFormat)
     {
@@ -98,6 +103,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("JSON")]
     [InlineData("PSD1")]
     public async Task CountryNameTest(string fileFormat)
     {
