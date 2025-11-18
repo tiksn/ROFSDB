@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
 
         services.TryAddKeyedSingleton<ISerialization, HclSerialization>("HCL");
         services.TryAddKeyedSingleton<ISerialization, JsonSerialization>("JSON");
+        services.TryAddKeyedSingleton<ISerialization, ParquetSerialization>("PARQUET");
         services.TryAddKeyedSingleton<ISerialization, TomlSerialization>("TOML");
         services.TryAddKeyedSingleton<ISerialization, YamlSerialization>("YAML");
         services.TryAddKeyedSingleton<ISerialization, PowerShellDataFileSerialization>("PSD1");

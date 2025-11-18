@@ -1,9 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Parquet;
+using Parquet.Data;
+using Parquet.Schema;
 using System.Collections.Frozen;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TIKSN.ROFSDB.FileStorageAdapters;
+using TIKSN.ROFSDB.Tests.Models;
 using Xunit;
 using Xunit.Abstractions;
 using Zio;
@@ -13,7 +18,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures;
 
 public class DatabaseEngineFixture : IAsyncLifetime
 {
-    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1"];
+    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1", "PARQUET"];
     private FrozenDictionary<string, ServiceProvider> formatServiceProviders;
     private MemoryFileSystem memoryFileSystem;
     public FrozenDictionary<string, IDatabaseEngine> DatabaseEngines { get; private set; }
@@ -27,7 +32,7 @@ public class DatabaseEngineFixture : IAsyncLifetime
     public async Task InitializeAsync()
     {
         this.memoryFileSystem = new();
-        WriteFiles(memoryFileSystem);
+        await WriteFiles(memoryFileSystem);
         this.formatServiceProviders = SerializationFormats.ToFrozenDictionary(
             keySelector: x => x,
             elementSelector: x =>
@@ -56,7 +61,7 @@ public class DatabaseEngineFixture : IAsyncLifetime
         }
     }
 
-    private static void WriteEuropeanCountries(IFileSystem fileSystem, StringBuilder stringBuilder)
+    private static async Task WriteEuropeanCountries(IFileSystem fileSystem, StringBuilder stringBuilder)
     {
         #region YAML
 
@@ -162,17 +167,27 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Countries/Europe-Italy.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region PARQUET
+
+        await WriteParquetCountries(fileSystem, [
+            new Country { ID = 1419150635, Name = "Austria" },
+            new Country { ID = 1552721979, Name = "France" },
+            new Country { ID = 1501801186, Name = "Italy" }
+        ], "/PARQUET/Countries/Europe.parquet");
+
+        #endregion PARQUET
     }
 
-    private static void WriteFiles(IFileSystem fileSystem)
+    private static async Task WriteFiles(IFileSystem fileSystem)
     {
         WriteFolders(fileSystem);
 
         var stringBuilder = new StringBuilder();
-        WriteNorthAmericanCountries(fileSystem, stringBuilder);
-        WriteEuropeanCountries(fileSystem, stringBuilder);
-        WriteMegacities(fileSystem, stringBuilder);
-        WriteNonMegacities(fileSystem, stringBuilder);
+        await WriteNorthAmericanCountries(fileSystem, stringBuilder);
+        await WriteEuropeanCountries(fileSystem, stringBuilder);
+        await WriteMegacities(fileSystem, stringBuilder);
+        await WriteNonMegacities(fileSystem, stringBuilder);
     }
 
     private static void WriteFolders(IFileSystem fileSystem)
@@ -184,7 +199,7 @@ public class DatabaseEngineFixture : IAsyncLifetime
         }
     }
 
-    private static void WriteMegacities(IFileSystem fileSystem, StringBuilder stringBuilder)
+    private static async Task WriteMegacities(IFileSystem fileSystem, StringBuilder stringBuilder)
     {
         #region YAML
 
@@ -241,9 +256,17 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Cities/Megacities-NewYorkCity.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region PARQUET
+
+        await WriteParquetCities(fileSystem, [
+            new City { ID = 918909193, Name = "New York City", CountryID = 1100746772 }
+        ], "/PARQUET/Cities/Megacities.parquet");
+
+        #endregion PARQUET
     }
 
-    private static void WriteNonMegacities(IFileSystem fileSystem, StringBuilder stringBuilder)
+    private static async Task WriteNonMegacities(IFileSystem fileSystem, StringBuilder stringBuilder)
     {
         #region YAML
 
@@ -428,9 +451,21 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Cities/Non-Megacities-Rome.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region PARQUET
+
+        await WriteParquetCities(fileSystem, [
+            new City { ID = 356389956, Name = "Austin", CountryID = 1100746772 },
+            new City { ID = 1572248850, Name = "Toronto", CountryID = 965475701 },
+            new City { ID = 1859443008, Name = "Vienna", CountryID = 1419150635 },
+            new City { ID = 1948404451, Name = "Paris", CountryID = 1552721979 },
+            new City { ID = 1062005753, Name = "Rome", CountryID = 1501801186 }
+        ], "/PARQUET/Cities/Non-Megacities.parquet");
+
+        #endregion PARQUET
     }
 
-    private static void WriteNorthAmericanCountries(IFileSystem fileSystem, StringBuilder stringBuilder)
+    private static async Task WriteNorthAmericanCountries(IFileSystem fileSystem, StringBuilder stringBuilder)
     {
         #region YAML
 
@@ -509,5 +544,46 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Countries/NorthAmerica-Canada.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region PARQUET
+
+        await WriteParquetCountries(fileSystem, [
+            new Country { ID = 1100746772, Name = "United States" },
+            new Country { ID = 965475701, Name = "Canada" }
+        ], "/PARQUET/Countries/NorthAmerica.parquet");
+
+        #endregion PARQUET
+    }
+
+    private static async Task WriteParquetCountries(IFileSystem fileSystem, Country[] countries, string filePath)
+    {
+        var schema = new ParquetSchema(
+            new DataField<int>("ID"),
+            new DataField<string>("Name")
+        );
+
+        await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
+        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
+
+        using var rowGroup = parquetWriter.CreateRowGroup();
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], countries.Select(c => c.ID).ToArray()));
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], countries.Select(c => c.Name).ToArray()));
+    }
+
+    private static async Task WriteParquetCities(IFileSystem fileSystem, City[] cities, string filePath)
+    {
+        var schema = new ParquetSchema(
+            new DataField<int>("ID"),
+            new DataField<string>("Name"),
+            new DataField<int>("CountryID")
+        );
+
+        await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
+        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
+
+        using var rowGroup = parquetWriter.CreateRowGroup();
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], cities.Select(c => c.ID).ToArray()));
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], cities.Select(c => c.Name).ToArray()));
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[2], cities.Select(c => c.CountryID).ToArray()));
     }
 }

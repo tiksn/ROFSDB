@@ -21,6 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Octopus.CoreParsers.Hcl" />
+    <PackageReference Include="Parquet.Net" />
     <PackageReference Include="System.Interactive.Async" />
     <PackageReference Include="System.Management.Automation" />
     <PackageReference Include="Tomlyn" />
