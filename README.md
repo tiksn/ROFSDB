@@ -13,7 +13,7 @@ ROFSDB provides a simple, efficient way to read and query data stored in files o
 ## Features
 
 - 🗂️ **Collection-based organization** - Directories represent collections, files represent documents
-- 📄 **Multiple format support** - JSON, YAML, TOML, HCL, and PowerShell Data files (PSD1)
+- 📄 **Multiple format support** - JSON, YAML, TOML, HCL, PowerShell Data files (PSD1), and Parquet
 - ⚡ **Async streaming** - Efficient `IAsyncEnumerable<T>` API for memory-efficient data access
 - 🔌 **Dependency Injection** - Built-in support for Microsoft.Extensions.DependencyInjection
 - 🔄 **Flexible storage** - Works with physical filesystems, embedded resources, or virtual filesystems (via Zio)
@@ -125,6 +125,7 @@ ROFSDB supports the following file formats:
 | **TOML** | `.toml` | Tom's Obvious, Minimal Language |
 | **HCL** | `.hcl` | HashiCorp Configuration Language |
 | **PowerShell Data** | `.psd1` | PowerShell Data files |
+| **Parquet** | `.parquet` | Apache Parquet columnar storage format |
 
 ### Format Examples
 
@@ -231,6 +232,7 @@ ROFSDB/
 │   ├── YamlSerialization.cs
 │   ├── TomlSerialization.cs
 │   ├── HclSerialization.cs
+│   ├── ParquetSerialization.cs
 │   └── PowerShellDataFileSerialization.cs
 └── ServiceCollectionExtensions.cs  # DI extension methods
 ```
