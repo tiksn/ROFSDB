@@ -19,6 +19,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CityCountTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -32,6 +33,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CollectionNameTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -46,6 +48,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CountryCityRelationsTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -62,6 +65,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CountryCountTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -75,6 +79,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CountryIdTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -93,6 +98,7 @@ public class DatabaseEngineTests(ITestOutputHelper testOutputHelper, DatabaseEng
     [InlineData("YAML")]
     [InlineData("TOML")]
     [InlineData("HCL")]
+    [InlineData("PSD1")]
     public async Task CountryNameTest(string fileFormat)
     {
         databaseEngineFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
