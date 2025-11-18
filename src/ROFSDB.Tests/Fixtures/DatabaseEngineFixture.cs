@@ -13,7 +13,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures;
 
 public class DatabaseEngineFixture : IAsyncLifetime
 {
-    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "PSD1"];
+    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1"];
     private FrozenDictionary<string, ServiceProvider> formatServiceProviders;
     private MemoryFileSystem memoryFileSystem;
     public FrozenDictionary<string, IDatabaseEngine> DatabaseEngines { get; private set; }
@@ -113,6 +113,31 @@ public class DatabaseEngineFixture : IAsyncLifetime
 
         #endregion HCL
 
+        #region JSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1419150635,");
+        stringBuilder.AppendLine("  \"Name\": \"Austria\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Countries/Europe-Austria.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1552721979,");
+        stringBuilder.AppendLine("  \"Name\": \"France\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Countries/Europe-France.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1501801186,");
+        stringBuilder.AppendLine("  \"Name\": \"Italy\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Countries/Europe-Italy.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSON
+
         #region PSD1
 
         stringBuilder.Clear();
@@ -192,6 +217,18 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/HCL/Cities/Megacities-NewYorkCity.hcl", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion HCL
+
+        #region JSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 918909193,");
+        stringBuilder.AppendLine("  \"Name\": \"New York City\",");
+        stringBuilder.AppendLine("  \"CountryID\": 1100746772");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Megacities-NewYorkCity.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSON
 
         #region PSD1
 
@@ -304,6 +341,50 @@ public class DatabaseEngineFixture : IAsyncLifetime
 
         #endregion HCL
 
+        #region JSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 356389956,");
+        stringBuilder.AppendLine("  \"Name\": \"Austin\",");
+        stringBuilder.AppendLine("  \"CountryID\": 1100746772");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Austin.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1572248850,");
+        stringBuilder.AppendLine("  \"Name\": \"Toronto\",");
+        stringBuilder.AppendLine("  \"CountryID\": 965475701");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Toronto.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1859443008,");
+        stringBuilder.AppendLine("  \"Name\": \"Vienna\",");
+        stringBuilder.AppendLine("  \"CountryID\": 1419150635");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Vienna.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1948404451,");
+        stringBuilder.AppendLine("  \"Name\": \"Paris\",");
+        stringBuilder.AppendLine("  \"CountryID\": 1552721979");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Paris.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1062005753,");
+        stringBuilder.AppendLine("  \"Name\": \"Rome\",");
+        stringBuilder.AppendLine("  \"CountryID\": 1501801186");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Rome.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSON
+
         #region PSD1
 
         stringBuilder.Clear();
@@ -392,6 +473,24 @@ public class DatabaseEngineFixture : IAsyncLifetime
         fileSystem.WriteAllText("/HCL/Countries/NorthAmerica-Canada.hcl", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion HCL
+
+        #region JSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 1100746772,");
+        stringBuilder.AppendLine("  \"Name\": \"United States\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Countries/NorthAmerica-UnitedStates.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{");
+        stringBuilder.AppendLine("  \"ID\": 965475701,");
+        stringBuilder.AppendLine("  \"Name\": \"Canada\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/JSON/Countries/NorthAmerica-Canada.json", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSON
 
         #region PSD1
 
