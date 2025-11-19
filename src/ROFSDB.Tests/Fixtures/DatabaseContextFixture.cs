@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Parquet;
 using Parquet.Data;
 using Parquet.Schema;
@@ -16,12 +16,12 @@ using Zio.FileSystems;
 
 namespace TIKSN.ROFSDB.Tests.Fixtures;
 
-public class DatabaseEngineFixture : IAsyncLifetime
+public class DatabaseContextFixture : IAsyncLifetime
 {
     private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1", "PARQUET"];
     private FrozenDictionary<string, ServiceProvider> formatServiceProviders;
     private MemoryFileSystem memoryFileSystem;
-    public FrozenDictionary<string, IDatabaseEngine> DatabaseEngines { get; private set; }
+    public FrozenDictionary<string, IDatabaseContext> DatabaseContexts { get; private set; }
 
     public Task DisposeAsync()
     {
@@ -42,9 +42,10 @@ public class DatabaseEngineFixture : IAsyncLifetime
                 services.AddSingleton<IFileSystem>(subFileSystem);
                 services.AddSingleton<IFileStorage>(new ZioFileSystemToFileStorageAdapter(subFileSystem));
                 services.AddROFSDB();
+                services.AddSingleton<IDatabaseContext, DatabaseContext>();
                 return services.BuildServiceProvider();
             });
-        DatabaseEngines = formatServiceProviders.ToFrozenDictionary(x => x.Key, y => y.Value.GetRequiredService<IDatabaseEngine>());
+        DatabaseContexts = formatServiceProviders.ToFrozenDictionary(x => x.Key, y => y.Value.GetRequiredService<IDatabaseContext>());
     }
 
     public void WriteFilesAndFoldersToTestOutput(string fileFormat, ITestOutputHelper testOutputHelper)
@@ -555,21 +556,6 @@ public class DatabaseEngineFixture : IAsyncLifetime
         #endregion PARQUET
     }
 
-    private static async Task WriteParquetCountries(IFileSystem fileSystem, Country[] countries, string filePath)
-    {
-        var schema = new ParquetSchema(
-            new DataField<int>("ID"),
-            new DataField<string>("Name")
-        );
-
-        await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
-        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
-
-        using var rowGroup = parquetWriter.CreateRowGroup();
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], countries.Select(c => c.ID).ToArray()));
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], countries.Select(c => c.Name).ToArray()));
-    }
-
     private static async Task WriteParquetCities(IFileSystem fileSystem, City[] cities, string filePath)
     {
         var schema = new ParquetSchema(
@@ -585,5 +571,20 @@ public class DatabaseEngineFixture : IAsyncLifetime
         await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], cities.Select(c => c.ID).ToArray()));
         await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], cities.Select(c => c.Name).ToArray()));
         await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[2], cities.Select(c => c.CountryID).ToArray()));
+    }
+
+    private static async Task WriteParquetCountries(IFileSystem fileSystem, Country[] countries, string filePath)
+    {
+        var schema = new ParquetSchema(
+            new DataField<int>("ID"),
+            new DataField<string>("Name")
+        );
+
+        await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
+        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
+
+        using var rowGroup = parquetWriter.CreateRowGroup();
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], countries.Select(c => c.ID).ToArray()));
+        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], countries.Select(c => c.Name).ToArray()));
     }
 }

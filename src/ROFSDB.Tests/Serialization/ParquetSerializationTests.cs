@@ -10,10 +10,11 @@ using Xunit;
 
 namespace TIKSN.ROFSDB.Tests.Serialization;
 
-public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFixture<DatabaseEngineFixture>
+[Collection("Database Context collection")]
+public class ParquetSerializationTests(DatabaseContextFixture fixture) : IClassFixture<DatabaseContextFixture>
 {
     private readonly ParquetSerialization serialization = new();
-    private readonly DatabaseEngineFixture fixture = fixture;
+    private readonly DatabaseContextFixture fixture = fixture;
 
     [Fact]
     public void FileExtensions_ShouldReturnParquetExtension()
@@ -27,8 +28,8 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
     [Fact]
     public async Task GetDocumentsAsync_ShouldReadCountriesFromParquetFile()
     {
-        var countries = await fixture.DatabaseEngines["PARQUET"]
-            .GetDocumentsAsync<Country>("Countries", CancellationToken.None)
+        var countries = await fixture.DatabaseContexts["PARQUET"]
+            .GetCountriesAsync(CancellationToken.None)
             .ToArrayAsync();
 
         countries.Length.ShouldBe(5);
@@ -39,8 +40,8 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
     [Fact]
     public async Task GetDocumentsAsync_ShouldReadCitiesFromParquetFile()
     {
-        var cities = await fixture.DatabaseEngines["PARQUET"]
-            .GetDocumentsAsync<City>("Cities", CancellationToken.None)
+        var cities = await fixture.DatabaseContexts["PARQUET"]
+            .GetCitiesAsync(CancellationToken.None)
             .ToArrayAsync();
 
         cities.Length.ShouldBe(6);
@@ -51,8 +52,8 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
     [Fact]
     public async Task GetDocumentsAsync_ShouldHandleBinaryStreamCorrectly()
     {
-        var countries = await fixture.DatabaseEngines["PARQUET"]
-            .GetDocumentsAsync<Country>("Countries", CancellationToken.None)
+        var countries = await fixture.DatabaseContexts["PARQUET"]
+            .GetCountriesAsync(CancellationToken.None)
             .ToArrayAsync();
 
         countries.Length.ShouldBeGreaterThan(0);
@@ -72,8 +73,8 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
 
         await Should.ThrowAsync<OperationCanceledException>(async () =>
         {
-            await foreach (var _ in fixture.DatabaseEngines["PARQUET"]
-                .GetDocumentsAsync<Country>("Countries", cts.Token))
+            await foreach (var _ in fixture.DatabaseContexts["PARQUET"]
+                .GetCountriesAsync(cts.Token))
             {
                 // Should be cancelled before reading
             }
@@ -83,8 +84,8 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
     [Fact]
     public async Task GetDocumentsAsync_ShouldHandleCaseInsensitivePropertyMatching()
     {
-        var countries = await fixture.DatabaseEngines["PARQUET"]
-            .GetDocumentsAsync<Country>("Countries", CancellationToken.None)
+        var countries = await fixture.DatabaseContexts["PARQUET"]
+            .GetCountriesAsync(CancellationToken.None)
             .ToArrayAsync();
 
         foreach (var country in countries)
@@ -94,4 +95,3 @@ public class ParquetSerializationTests(DatabaseEngineFixture fixture) : IClassFi
         }
     }
 }
-
