@@ -90,26 +90,44 @@ services.AddSingleton<IFileProvider>(
 var serviceProvider = services.BuildServiceProvider();
 ```
 
-### 4. Use the Database Engine
+### 4. Define a Typed Database Context
+
+For a better-structured data access, you can define a typed context:
 
 ```csharp
-var databaseEngine = serviceProvider.GetRequiredService<IDatabaseEngine>();
-
-// Get all collections
-await foreach (var collectionName in databaseEngine.GetCollectionsAsync(cancellationToken))
+public interface ICityContext
 {
-    Console.WriteLine($"Collection: {collectionName}");
+    IAsyncEnumerable<City> GetCitiesAsync(CancellationToken cancellationToken);
+    IAsyncEnumerable<Country> GetCountriesAsync(CancellationToken cancellationToken);
 }
 
+public class CityContext(IDatabaseEngine databaseEngine) : ICityContext
+{
+    public IAsyncEnumerable<City> GetCitiesAsync(CancellationToken cancellationToken)
+        => databaseEngine.GetDocumentsAsync<City>("Cities", cancellationToken);
+
+    public IAsyncEnumerable<Country> GetCountriesAsync(CancellationToken cancellationToken)
+        => databaseEngine.GetDocumentsAsync<Country>("Countries", cancellationToken);
+}
+
+// Then register it in DI
+services.AddSingleton<ICityContext, CityContext>();
+```
+
+### 5. Use the Typed Context
+
+```csharp
+var cityContext = serviceProvider.GetRequiredService<ICityContext>();
+
 // Get all documents from a collection
-await foreach (var city in databaseEngine.GetDocumentsAsync<City>("Cities", cancellationToken))
+await foreach (var city in cityContext.GetCitiesAsync(cancellationToken))
 {
     Console.WriteLine($"City: {city.Name}, Population: {city.Population}");
 }
 
 // Query with LINQ
-var largeCities = await databaseEngine
-    .GetDocumentsAsync<City>("Cities", cancellationToken)
+var largeCities = await cityContext
+    .GetCitiesAsync(cancellationToken)
     .Where(c => c.Population > 1000000)
     .ToListAsync(cancellationToken);
 ```
@@ -223,6 +241,8 @@ services.AddKeyedSingleton<ISerialization, CustomSerialization>("XML");
 ROFSDB/
 ├── DatabaseEngine.cs          # Main database engine implementation
 ├── IDatabaseEngine.cs          # Database engine interface
+├── DatabaseContext.cs         # Typed database context implementation
+├── IDatabaseContext.cs         # Typed database context interface
 ├── IFileStorage.cs             # File storage abstraction
 ├── FileStorageAdapters/        # Storage adapter implementations
 │   ├── FileProviderToFileStorageAdapter.cs
