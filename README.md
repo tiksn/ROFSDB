@@ -13,7 +13,7 @@ ROFSDB provides a simple, efficient way to read and query data stored in files o
 ## Features
 
 - 🗂️ **Collection-based organization** - Directories represent collections, files represent documents
-- 📄 **Multiple format support** - JSON, YAML, TOML, HCL, PowerShell Data files (PSD1), and Parquet
+- 📄 **Multiple format support** - JSON, YAML, TOML, KDL, HCL, PowerShell Data files (PSD1), and Parquet
 - ⚡ **Async streaming** - Efficient `IAsyncEnumerable<T>` API for memory-efficient data access
 - 🔌 **Dependency Injection** - Built-in support for Microsoft.Extensions.DependencyInjection
 - 🔄 **Flexible storage** - Works with physical filesystems, embedded resources, or virtual filesystems (via Zio)
@@ -63,10 +63,12 @@ data/
 ├── Cities/
 │   ├── city1.json
 │   ├── city2.yaml
-│   └── city3.toml
+│   ├── city3.toml
+│   └── city4.kdl
 └── Countries/
     ├── country1.json
-    └── country2.yaml
+    ├── country2.yaml
+    └── country3.kdl
 ```
 
 ### 3. Configure Services
@@ -141,6 +143,7 @@ ROFSDB supports the following file formats:
 | **JSON** | `.json` | JavaScript Object Notation |
 | **YAML** | `.yaml`, `.yml` | YAML Ain't Markup Language |
 | **TOML** | `.toml` | Tom's Obvious, Minimal Language |
+| **KDL** | `.kdl` | KDL Document Language |
 | **HCL** | `.hcl` | HashiCorp Configuration Language |
 | **PowerShell Data** | `.psd1` | PowerShell Data files |
 | **Parquet** | `.parquet` | Apache Parquet columnar storage format |
@@ -170,7 +173,41 @@ population = 8336817
 countryID = 1100746772
 ```
 
-Files can contain either a single document or an array of documents. Arrays are automatically expanded into individual documents.
+**KDL** (`city.kdl`):
+```kdl
+city name="New York" population=8336817 country-id=1100746772
+```
+
+KDL files target KDL v2 and use top-level nodes named after the target C# model type in acronym-aware kebab case:
+
+- `Country` maps to `country`
+- `City` maps to `city`
+- `IPAddressRule` maps to `ip-address-rule`
+- `ID` maps to `id`
+- `CountryID` maps to `country-id`
+
+KDL members can be written as node properties or as scalar child nodes with one argument:
+
+```kdl
+country id=1419150635 name="Austria"
+
+country {
+  id 1552721979
+  name "France"
+}
+```
+
+One `.kdl` file can contain multiple documents of the same type:
+
+```kdl
+country id=1419150635 name="Austria"
+country id=1552721979 name="France"
+country id=1501801186 name="Italy"
+```
+
+KDL support is strict: node and member names are case-sensitive, unknown members throw, unexpected top-level node names throw, and duplicate members throw. Missing members keep their normal CLR default values. The initial KDL mapper supports flat POCOs with public writable scalar properties. KDL v2 scalar literals such as `#true`, `#false`, and `#null` are supported.
+
+Files in most text formats can contain either a single document or multiple documents, depending on the format. JSON arrays, YAML multi-document streams, and KDL repeated top-level nodes are automatically expanded into individual documents.
 
 ## Advanced Usage
 
@@ -249,6 +286,7 @@ ROFSDB/
 │   └── ZioFileSystemToFileStorageAdapter.cs
 ├── Serialization/              # Serialization format implementations
 │   ├── JsonSerialization.cs
+│   ├── KdlSerialization.cs
 │   ├── YamlSerialization.cs
 │   ├── TomlSerialization.cs
 │   ├── HclSerialization.cs
@@ -269,3 +307,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - [NuGet Package](https://www.nuget.org/packages/ROFSDB)
 - [GitHub Repository](https://github.com/tiksn/ROFSDB)
+- [KDL](https://kdl.dev/)
+- [KdlSharp](https://github.com/AndreyAkinshin/KdlSharp)
