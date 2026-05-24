@@ -18,7 +18,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures;
 
 public class DatabaseContextFixture : IAsyncLifetime
 {
-    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1", "PARQUET"];
+    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1", "PARQUET", "KDL"];
     private FrozenDictionary<string, ServiceProvider> formatServiceProviders;
     private MemoryFileSystem memoryFileSystem;
     public FrozenDictionary<string, IDatabaseContext> DatabaseContexts { get; private set; }
@@ -169,6 +169,25 @@ public class DatabaseContextFixture : IAsyncLifetime
 
         #endregion PSD1
 
+        #region KDL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("country {");
+        stringBuilder.AppendLine("  id 1419150635");
+        stringBuilder.AppendLine("  name \"Austria\"");
+        stringBuilder.AppendLine("}");
+        stringBuilder.AppendLine("country {");
+        stringBuilder.AppendLine("  id 1552721979");
+        stringBuilder.AppendLine("  name \"France\"");
+        stringBuilder.AppendLine("}");
+        stringBuilder.AppendLine("country {");
+        stringBuilder.AppendLine("  id 1501801186");
+        stringBuilder.AppendLine("  name \"Italy\"");
+        stringBuilder.AppendLine("}");
+        fileSystem.WriteAllText("/KDL/Countries/Europe.kdl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion KDL
+
         #region PARQUET
 
         await WriteParquetCountries(fileSystem, [
@@ -257,6 +276,14 @@ public class DatabaseContextFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Cities/Megacities-NewYorkCity.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region KDL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("city id=918909193 name=\"New York City\" country-id=1100746772");
+        fileSystem.WriteAllText("/KDL/Cities/Megacities.kdl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion KDL
 
         #region PARQUET
 
@@ -453,6 +480,18 @@ public class DatabaseContextFixture : IAsyncLifetime
 
         #endregion PSD1
 
+        #region KDL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("city id=356389956 name=\"Austin\" country-id=1100746772");
+        stringBuilder.AppendLine("city id=1572248850 name=\"Toronto\" country-id=965475701");
+        stringBuilder.AppendLine("city id=1859443008 name=\"Vienna\" country-id=1419150635");
+        stringBuilder.AppendLine("city id=1948404451 name=\"Paris\" country-id=1552721979");
+        stringBuilder.AppendLine("city id=1062005753 name=\"Rome\" country-id=1501801186");
+        fileSystem.WriteAllText("/KDL/Cities/Non-Megacities.kdl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion KDL
+
         #region PARQUET
 
         await WriteParquetCities(fileSystem, [
@@ -545,6 +584,15 @@ public class DatabaseContextFixture : IAsyncLifetime
         fileSystem.WriteAllText("/PSD1/Countries/NorthAmerica-Canada.psd1", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion PSD1
+
+        #region KDL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("country id=1100746772 name=\"United States\"");
+        stringBuilder.AppendLine("country id=965475701 name=\"Canada\"");
+        fileSystem.WriteAllText("/KDL/Countries/NorthAmerica.kdl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion KDL
 
         #region PARQUET
 

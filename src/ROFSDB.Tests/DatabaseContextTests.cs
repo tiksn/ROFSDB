@@ -22,6 +22,7 @@ public class DatabaseContextTests(ITestOutputHelper testOutputHelper, DatabaseCo
     [InlineData("JSON")]
     [InlineData("PSD1")]
     [InlineData("PARQUET")]
+    [InlineData("KDL")]
     public async Task CityCountTest(string fileFormat)
     {
         databaseContextFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -38,6 +39,7 @@ public class DatabaseContextTests(ITestOutputHelper testOutputHelper, DatabaseCo
     [InlineData("JSON")]
     [InlineData("PSD1")]
     [InlineData("PARQUET")]
+    [InlineData("KDL")]
     public async Task CountryCityRelationsTest(string fileFormat)
     {
         databaseContextFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -57,6 +59,7 @@ public class DatabaseContextTests(ITestOutputHelper testOutputHelper, DatabaseCo
     [InlineData("JSON")]
     [InlineData("PSD1")]
     [InlineData("PARQUET")]
+    [InlineData("KDL")]
     public async Task CountryCountTest(string fileFormat)
     {
         databaseContextFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -73,6 +76,7 @@ public class DatabaseContextTests(ITestOutputHelper testOutputHelper, DatabaseCo
     [InlineData("JSON")]
     [InlineData("PSD1")]
     [InlineData("PARQUET")]
+    [InlineData("KDL")]
     public async Task CountryIdTest(string fileFormat)
     {
         databaseContextFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
@@ -94,6 +98,7 @@ public class DatabaseContextTests(ITestOutputHelper testOutputHelper, DatabaseCo
     [InlineData("JSON")]
     [InlineData("PSD1")]
     [InlineData("PARQUET")]
+    [InlineData("KDL")]
     public async Task CountryNameTest(string fileFormat)
     {
         databaseContextFixture.WriteFilesAndFoldersToTestOutput(fileFormat, testOutputHelper);
