@@ -6,4 +6,4 @@ param(
     [string]$Instance
 )
 
-Invoke-Build -Task Publish -File "$PSScriptRoot/.build.ps1" -Version $Version -Instance $Instance
+Invoke-Build -Task Version -File "$PSScriptRoot/.build.ps1" -Version $Version -Instance $Instance

@@ -6,4 +6,4 @@ param(
     [string]$Instance
 )
 
-Invoke-Build -Task Test -File "$PSScriptRoot/.build.ps1" -Version $Version -Instance $Instance
+Invoke-Build -Task Restore -File "$PSScriptRoot/.build.ps1" -Version $Version -Instance $Instance

@@ -1,8 +1,9 @@
 # ROFSDB
 
 [![Version](https://img.shields.io/nuget/v/ROFSDB.svg)](https://www.nuget.org/packages/ROFSDB)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/ROFSDB.svg)](https://www.nuget.org/packages/ROFSDB)
-[![GitHub Super-Linter](https://github.com/tiksn/ROFSDB/workflows/Lint/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/ROFSDB.svg)](https://www.nuget.org/packages/ROFSDB)
+[![CICD](https://github.com/tiksn/ROFSDB/actions/workflows/cicd.yml/badge.svg)](https://github.com/tiksn/ROFSDB/actions/workflows/cicd.yml)
+[![Lint](https://github.com/tiksn/ROFSDB/actions/workflows/lint.yml/badge.svg)](https://github.com/tiksn/ROFSDB/actions/workflows/lint.yml)
 
 **Read-Only FileSystem Database** - A lightweight .NET library for reading structured data from the filesystem as if it were a database.
 
