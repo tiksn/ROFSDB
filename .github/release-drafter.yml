@@ -1,0 +1,47 @@
+# release-drafter automatically creates a draft release as pull requests are completed.
+# It uses GitHub labels to categorize changes and generate the next version.
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+change-template: "- $TITLE by @$AUTHOR (#$NUMBER)"
+no-changes-template: "- No changes"
+categories:
+  - title: "📚 Documentation"
+    labels:
+      - "documentation"
+  - title: "🚀 New Features"
+    labels:
+      - "enhancement"
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "bug"
+  - title: "🧰 Maintenance"
+    labels:
+      - "maintenance"
+version-resolver:
+  major:
+    labels:
+      - "major"
+  minor:
+    labels:
+      - "minor"
+  patch:
+    labels:
+      - "patch"
+  default: patch
+template: |
+  $CHANGES
+
+  ## 👨🏼‍💻 Contributors
+
+  $CONTRIBUTORS
+autolabeler:
+  - label: "documentation"
+    files:
+      - "**/*.md"
+  - label: "enhancement"
+    files:
+      - "src/ROFSDB/**/*"
+  - label: "maintenance"
+    files:
+      - ".github/**/*"
+      - "src/ROFSDB.Tests/**/*"

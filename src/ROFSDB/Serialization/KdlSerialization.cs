@@ -210,7 +210,7 @@ public class KdlSerialization : ISerialization
         return model;
     }
 
-    private static IReadOnlyDictionary<string, PropertyInfo> GetSerializableProperties<T>()
+    private static Dictionary<string, PropertyInfo> GetSerializableProperties<T>()
     {
         var properties = typeof(T)
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
@@ -314,7 +314,7 @@ public class KdlSerialization : ISerialization
     private static void SetMember<T>(
         T model,
         IReadOnlyDictionary<string, PropertyInfo> properties,
-        ISet<string> seenMembers,
+        HashSet<string> seenMembers,
         string memberName,
         KdlValue value)
         where T : class, new()

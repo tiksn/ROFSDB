@@ -2,15 +2,38 @@ name: Lint
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - main
   pull_request:
-    branches: [ develop ]
+    branches:
+      - main
+
+permissions: read-all
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-
   lint:
+    name: Lint
     runs-on: ubuntu-latest
-    
+
+    permissions:
+      statuses: write
+
     steps:
-    - name: Super-Linter
-      uses: github/super-linter@v4
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Super-linter
+        uses: super-linter/super-linter@v8.6.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JSCPD: false
