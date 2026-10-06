@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IFileStorage, TFileStorage>();
 
         services.TryAddKeyedSingleton<ISerialization, HclSerialization>("HCL");
+        services.TryAddKeyedSingleton<ISerialization, JsonLinesSerialization>("JSONL");
         services.TryAddKeyedSingleton<ISerialization, JsonSerialization>("JSON");
         services.TryAddKeyedSingleton<ISerialization, KdlSerialization>("KDL");
         services.TryAddKeyedSingleton<ISerialization, ParquetSerialization>("PARQUET");
