@@ -18,7 +18,7 @@ namespace TIKSN.ROFSDB.Tests.Fixtures;
 
 public class DatabaseContextFixture : IAsyncLifetime
 {
-    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "PSD1", "PARQUET", "KDL"];
+    private static readonly string[] SerializationFormats = ["YAML", "TOML", "HCL", "JSON", "JSONL", "NDJSON", "PSD1", "PARQUET", "KDL"];
     private FrozenDictionary<string, ServiceProvider> formatServiceProviders;
     private MemoryFileSystem memoryFileSystem;
     public FrozenDictionary<string, IDatabaseContext> DatabaseContexts { get; private set; }
@@ -144,6 +144,24 @@ public class DatabaseContextFixture : IAsyncLifetime
 
         #endregion JSON
 
+        #region JSONL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"id\": 1419150635, \"name\": \"Austria\"}");
+        stringBuilder.AppendLine();
+        stringBuilder.AppendLine("{\"id\": 1552721979, \"name\": \"France\"}");
+        fileSystem.WriteAllText("/JSONL/Countries/Europe.jsonl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSONL
+
+        #region NDJSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"ID\": 1501801186, \"Name\": \"Italy\"}");
+        fileSystem.WriteAllText("/NDJSON/Countries/Europe.ndjson", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion NDJSON
+
         #region PSD1
 
         stringBuilder.Clear();
@@ -264,6 +282,22 @@ public class DatabaseContextFixture : IAsyncLifetime
         fileSystem.WriteAllText("/JSON/Cities/Megacities-NewYorkCity.json", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion JSON
+
+        #region JSONL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"id\": 918909193, \"name\": \"New York City\", \"countryid\": 1100746772}");
+        fileSystem.WriteAllText("/JSONL/Cities/Megacities.jsonl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSONL
+
+        #region NDJSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"ID\": 918909193, \"Name\": \"New York City\", \"CountryID\": 1100746772}");
+        fileSystem.WriteAllText("/NDJSON/Cities/Megacities.ndjson", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion NDJSON
 
         #region PSD1
 
@@ -435,6 +469,27 @@ public class DatabaseContextFixture : IAsyncLifetime
         fileSystem.WriteAllText("/JSON/Cities/Non-Megacities-Rome.json", stringBuilder.ToString(), Encoding.UTF8);
 
         #endregion JSON
+
+        #region JSONL
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"id\": 356389956, \"name\": \"Austin\", \"countryid\": 1100746772}");
+        stringBuilder.AppendLine("{\"id\": 1572248850, \"name\": \"Toronto\", \"countryid\": 965475701}");
+        stringBuilder.AppendLine("{\"id\": 1859443008, \"name\": \"Vienna\", \"countryid\": 1419150635}");
+        stringBuilder.AppendLine("{\"id\": 1948404451, \"name\": \"Paris\", \"countryid\": 1552721979}");
+        stringBuilder.AppendLine("{\"id\": 1062005753, \"name\": \"Rome\", \"countryid\": 1501801186}");
+        fileSystem.WriteAllText("/JSONL/Cities/Non-Megacities.jsonl", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion JSONL
+
+        #region NDJSON
+
+        stringBuilder.Clear();
+        stringBuilder.AppendLine("{\"ID\": 356389956, \"Name\": \"Austin\", \"CountryID\": 1100746772}");
+        stringBuilder.AppendLine("{\"ID\": 1572248850, \"Name\": \"Toronto\", \"CountryID\": 965475701}");
+        fileSystem.WriteAllText("/NDJSON/Cities/Non-Megacities.ndjson", stringBuilder.ToString(), Encoding.UTF8);
+
+        #endregion NDJSON
 
         #region PSD1
 

@@ -142,6 +142,7 @@ ROFSDB supports the following file formats:
 | Format | Extension | Description |
 |--------|-----------|-------------|
 | **JSON** | `.json` | JavaScript Object Notation |
+| **JSON Lines** | `.jsonl`, `.ndjson` | Newline-delimited JSON objects |
 | **YAML** | `.yaml`, `.yml` | YAML Ain't Markup Language |
 | **TOML** | `.toml` | Tom's Obvious, Minimal Language |
 | **KDL** | `.kdl` | KDL Document Language |
