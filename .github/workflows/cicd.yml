@@ -85,7 +85,7 @@ jobs:
         run: ./pack.ps1 -Version $env:PACKAGE_VERSION -Instance ${{ github.run_id }}
       - name: "Publish Artefacts"
         if: matrix.os == 'windows-latest' && steps.package_version.outputs.should_pack == 'true'
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: .trash
           path: ".trash"
