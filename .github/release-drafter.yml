@@ -40,8 +40,8 @@ autolabeler:
       - "**/*.md"
   - label: "enhancement"
     files:
-      - "src/ROFSDB/**/*"
+      - "ROFSDB/**/*"
   - label: "maintenance"
     files:
       - ".github/**/*"
-      - "src/ROFSDB.Tests/**/*"
+      - "ROFSDB.Tests/**/*"

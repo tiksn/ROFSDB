@@ -45,7 +45,7 @@ function Get-NuGetApiKey {
 }
 
 task Init {
-    $script:solution = Resolve-RepositoryPath './src/ROFSDB.slnx'
+    $script:solution = Resolve-RepositoryPath './ROFSDB.slnx'
     $script:NextVersion = $null
     $script:trashFolder = Join-Path -Path . -ChildPath '.trash'
 
@@ -98,7 +98,7 @@ task Build Format, Version, {
 }
 
 task Test Build, {
-    $project = Resolve-RepositoryPath './src/ROFSDB.Tests/ROFSDB.Tests.csproj'
+    $project = Resolve-RepositoryPath './ROFSDB.Tests/ROFSDB.Tests.csproj'
 
     Exec { dotnet test $project --configuration Release --no-build }
 }
@@ -106,7 +106,7 @@ task Test Build, {
 task Pack Test, Version, {
     Assert (-not [string]::IsNullOrWhiteSpace($script:NextVersion)) 'Version is required for package creation.'
 
-    $project = Resolve-RepositoryPath './src/ROFSDB/ROFSDB.csproj'
+    $project = Resolve-RepositoryPath './ROFSDB/ROFSDB.csproj'
 
     Exec { dotnet pack $project --configuration Release --no-build --output $script:trashFolder -p:Version=$script:NextVersion }
 }
