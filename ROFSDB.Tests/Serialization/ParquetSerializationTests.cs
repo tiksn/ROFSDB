@@ -96,11 +96,13 @@ public class ParquetSerializationTests(DatabaseContextFixture fixture) : IClassF
         }
     }
 
+#pragma warning disable IDE1006 // Naming Styles
     private class LowercaseCountry
     {
         public int id { get; set; }
         public string name { get; set; }
     }
+#pragma warning restore IDE1006 // Naming Styles
 
     [Fact]
     public async Task GetDocumentsAsync_ShouldDeserializeWhenCasingDiffers()
