@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Parquet;
-using Parquet.Data;
 using Parquet.Schema;
+using Parquet.Serialization;
 using System.Collections.Frozen;
 using System.IO;
 using System.Linq;
@@ -661,33 +661,13 @@ public class DatabaseContextFixture : IAsyncLifetime
 
     private static async Task WriteParquetCities(IFileSystem fileSystem, City[] cities, string filePath)
     {
-        var schema = new ParquetSchema(
-            new DataField<int>("ID"),
-            new DataField<string>("Name"),
-            new DataField<int>("CountryID")
-        );
-
         await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
-        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
-
-        using var rowGroup = parquetWriter.CreateRowGroup();
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], cities.Select(c => c.ID).ToArray()));
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], cities.Select(c => c.Name).ToArray()));
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[2], cities.Select(c => c.CountryID).ToArray()));
+        await ParquetSerializer.SerializeAsync(cities, stream);
     }
 
     private static async Task WriteParquetCountries(IFileSystem fileSystem, Country[] countries, string filePath)
     {
-        var schema = new ParquetSchema(
-            new DataField<int>("ID"),
-            new DataField<string>("Name")
-        );
-
         await using var stream = fileSystem.OpenFile(filePath, FileMode.Create, FileAccess.Write);
-        await using var parquetWriter = await ParquetWriter.CreateAsync(schema, stream);
-
-        using var rowGroup = parquetWriter.CreateRowGroup();
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[0], countries.Select(c => c.ID).ToArray()));
-        await rowGroup.WriteColumnAsync(new DataColumn(schema.DataFields[1], countries.Select(c => c.Name).ToArray()));
+        await ParquetSerializer.SerializeAsync(countries, stream);
     }
 }
