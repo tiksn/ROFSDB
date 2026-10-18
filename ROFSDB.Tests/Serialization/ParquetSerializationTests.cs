@@ -1,3 +1,4 @@
+using Parquet.Serialization;
 using Shouldly;
 using System;
 using System.Linq;
@@ -93,5 +94,25 @@ public class ParquetSerializationTests(DatabaseContextFixture fixture) : IClassF
             country.ID.ShouldBeGreaterThan(0);
             country.Name.ShouldNotBeNullOrEmpty();
         }
+    }
+
+    private class LowercaseCountry
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
+    [Fact]
+    public async Task GetDocumentsAsync_ShouldDeserializeWhenCasingDiffers()
+    {
+        using var stream = new System.IO.MemoryStream();
+        await ParquetSerializer.SerializeAsync([new LowercaseCountry { id = 42, name = "Testland" }], stream);
+        stream.Position = 0;
+
+        var result = await serialization.GetDocumentsAsync<Country>(stream, CancellationToken.None).ToArrayAsync();
+
+        result.Length.ShouldBe(1);
+        result[0].ID.ShouldBe(42);
+        result[0].Name.ShouldBe("Testland");
     }
 }
