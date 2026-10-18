@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using Tomlyn;
 
@@ -9,6 +10,11 @@ namespace TIKSN.ROFSDB.Serialization;
 public class TomlSerialization : ISerialization
 {
     private static readonly IEnumerable<string> fileExtensions = [".toml"];
+    private static readonly TomlSerializerOptions tomlOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
+    };
 
     public IEnumerable<string> FileExtensions => fileExtensions;
 
@@ -19,8 +25,12 @@ public class TomlSerialization : ISerialization
     {
         using var streamReader = new StreamReader(stream);
 
-        string content = streamReader.ReadToEnd();
+        var content = await streamReader.ReadToEndAsync(cancellationToken);
 
-        yield return Toml.ToModel<T>(content);
+        var document = TomlSerializer.Deserialize<T>(content, tomlOptions);
+        if (document != null)
+        {
+            yield return document;
+        }
     }
-}
+}
