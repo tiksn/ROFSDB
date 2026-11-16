@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <RootNamespace>TIKSN.ROFSDB</RootNamespace>
     <AssemblyName>TIKSN.ROFSDB</AssemblyName>
     <PackageId>ROFSDB</PackageId>
@@ -16,7 +16,6 @@
   <ItemGroup>
     <PackageReference Include="KdlSharp" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" />
     <PackageReference Include="Microsoft.SourceLink.GitHub">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
