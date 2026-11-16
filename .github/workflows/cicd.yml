@@ -43,7 +43,8 @@ jobs:
       - name: "Install .NET Core SDK"
         uses: actions/setup-dotnet@v6.1.0
         with:
-          dotnet-version: 11.0.x
+          dotnet-version: latest
+          dotnet-channel: STS
       - name: "Install InvokeBuild Module"
         shell: pwsh
         run: Install-Module -Name InvokeBuild -Force -Scope CurrentUser
@@ -115,7 +116,8 @@ jobs:
       - name: "Install .NET Core SDK"
         uses: actions/setup-dotnet@v6.1.0
         with:
-          dotnet-version: 11.0.x
+          dotnet-version: latest
+          dotnet-channel: STS
       - name: "Install InvokeBuild Module"
         shell: pwsh
         run: Install-Module -Name InvokeBuild -Force -Scope CurrentUser
